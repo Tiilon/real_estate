@@ -1,0 +1,422 @@
+{% extends 'layouts/user.html' %}
+{% block lp %}
+    active
+{% endblock %}
+{% block css %}
+<style>
+    .autocomplete {
+        /*the container must be positioned relative:*/
+        position: relative;
+        /* display: inline-block; */
+    }
+
+    input {
+        border: 1px solid transparent;
+        background-color: #f1f1f1;
+        padding: 10px;
+        font-size: 16px;
+    }
+
+    /* input[type=text] {
+  background-color: #f1f1f1;
+  width: 100%;
+}
+input[type=submit] {
+  background-color: DodgerBlue;
+  color: #fff;
+} */
+
+    .autocomplete-items {
+        position: absolute;
+        border: 1px solid #d4d4d4;
+        border-bottom: none;
+        border-top: none;
+        z-index: 99;
+        /*position the autocomplete items to be the same width as the container:*/
+        top: 100%;
+        left: 0;
+        right: 0;
+    }
+
+    .autocomplete-items div {
+        padding: 10px;
+        cursor: pointer;
+        background-color: #fff;
+        border-bottom: 1px solid #d4d4d4;
+    }
+
+    .autocomplete-items div:hover {
+        /*when hovering an item:*/
+        background-color: #e9e9e9;
+    }
+
+    .autocomplete-active {
+        /*when navigating through the items using the arrow keys:*/
+        background-color: DodgerBlue !important;
+        color: #ffffff;
+    }
+</style>
+{% endblock %}
+{% block banner %}
+    <section class="post-wrapper-top dm-shadow clearfix">
+        <div class="container">
+            <div class="post-wrapper-top-shadow">
+                <span class="s1"></span>
+            </div>
+            <div class="col-lg-12">
+                <ul class="breadcrumb">
+                    <li><a href="index.html">Home</a></li>
+                    <li>List a House Property</li>
+                </ul>
+                <h2>List a House Property</h2>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+{% block contents %}
+    <section class="generalwrapper dm-shadow clearfix">
+        <div class="container">
+            <div class="row">
+                <div id="left_sidebar" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 first clearfix">
+                    <div class="widget clearfix">
+                        <div class="title"><h3>Banner Ads</h3></div>
+                        <a href="#">Ads go here</a>
+                    </div><!-- end widget -->
+
+                </div><!-- #left_sidebar -->
+
+                <div id="content" class="col-lg-7 col-md-6 col-sm-6 col-xs-12 clearfix">
+                    <div class="property_wrapper boxes clearfix">
+                        <h3 class="big_title">List Property Form<small>You can submit your property</small></h3>
+                        <form action="#" method="post" enctype="multipart/form-data">{% csrf_token %}
+                            <div class="form-group">
+                                <label for="id_acquisition">Acquisition Type</label>
+                                <select name="acquisition_type" id="id_acquisition" class="show-menu-arrow selectpicker">
+                                    <option value="">Select Acquisition Type</option>
+                                    <option value="Rent">Rent</option>
+                                    <option value="Sale">Sale</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="description">Description</label>
+                                <textarea class="form-control" name="description" id="description" rows="6" placeholder="Add property details goes here"></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="id_acquisition">Category</label>
+                                <select name="category" id="id_category" class="show-menu-arrow selectpicker" required>
+                                    <option value="">Select Category</option>
+                                    <option value="Flat">Flat</option>
+                                    <option value="Apartment">Apartment</option>
+                                    <option value="Self-Contained">Self-Contained</option>
+                                    <option value="Hostel">Hostel</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="country">Regions</label>
+                                <select id="country" name="region" class="show-menu-arrow selectpicker" required>
+                                    <option value="Greater Accra">Select Region</option>
+                                    <option value="Greater Accra">Greater Accra</option>
+                                    <option value="Ashanti">Ashanti</option>
+                                    <option value="Eastern">Eastern</option>
+                                    <option value="Western">Western</option>
+                                    <option value="Northen">Northen</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group autocomplete">
+                                <label for="id_town">Town</label>
+                                <input type="text" name="town" autocomplete="off" id="id_town" placeholder="Please state town your property is located" required class="form-control">
+                            </div>
+
+                             <div class="form-group">
+                                <label for="id_town">Close Land Mark</label>
+                                <input type="text" name="close_landmark" id="id_landmark" placeholder="Please give a close landmark" required class="form-control">
+                            </div>
+
+                            <hr>
+                            <div class="clearfix">
+                                <label>Amenities</label><br>
+                                <div class="col-lg-4 col-md-6 col-sm-12">
+                                    <label class="checkbox"><input id="conditioning" name="is_furnished" type="checkbox"> Furnished</label>
+                                    <label class="checkbox"><input id="Bedding" name="has_garage" type="checkbox"> Garage</label>
+                                    <label class="checkbox"><input id="Heating" name="has_compound" type="checkbox"> Compound</label>
+
+                                </div>
+                            </div><!-- end row -->
+                            <hr>
+                            <div class="row clearfix">
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <label>Number of Bedrooms</label><br>
+                                    <div class="form-group">
+                                        {#                                        <span class="input-group-addon">$</span>#}
+                                        <input type="number" class="form-control" name="nob" required>
+                                        {#                                        <span class="input-group-addon">.00</span>#}
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <label>Number of Washrooms</label><br>
+                                    <div class="form-group">
+                                        {#                                        <span class="input-group-addon">$</span>#}
+                                        <input type="number" class="form-control" name="now" required>
+                                        {#                                        <span class="input-group-addon">.00</span>#}
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <label>Number of Kitchens</label><br>
+                                    <div class="form-group">
+                                        {#                                        <span class="input-group-addon">$</span>#}
+                                        <input type="number" class="form-control" name="nok" required>
+                                        {#                                        <span class="input-group-addon">.00</span>#}
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="form-group" id="rent_duration" hidden>
+                                        <label for="duration">Rent Duration</label><br>
+                                        <select name="rent_duration" id="duration" class="show-menu-arrow selectpicker">
+                                            <option value="">Select Rent Duration</option>
+                                            <option value="One Month">One Month</option>
+                                            <option value="Six Months">Six Months</option>
+                                            <option value="One Year">One Year</option>
+                                            <option value="Two Years">Two Years</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <label>Price</label><br>
+                                    <div class="input-group">
+                                        <span class="input-group-addon">Ghc</span>
+                                        <input type="number" class="form-control" step="any" name="amount" required>
+                                        <span class="input-group-addon">.00</span>
+                                    </div>
+                                </div>
+
+                            </div><!-- end row -->
+
+                            <hr>
+                            <label>Submit Screenshot</label>
+
+                            <div class="fileupload fileupload-new" data-provides="fileupload">
+                                <div class="fileupload-preview thumbnail"></div>
+                                <div>
+                                    <span class="btn btn-primary btn-file">
+                                        <span class="fileupload-new">Select image</span>
+                                        <span class="fileupload-exists">Change</span>
+                                        <input type="file" name="file1">
+                                    </span>
+                                    <a href="#" class="btn btn-primary fileupload-exists" data-dismiss="fileupload">Remove</a>
+                                </div>
+                            </div>
+
+                            <div class="fileupload fileupload-new" data-provides="fileupload">
+                                <div class="fileupload-preview thumbnail"></div>
+                                <div>
+                                    <span class="btn btn-primary btn-file">
+                                        <span class="fileupload-new">Select image</span>
+                                        <span class="fileupload-exists">Change</span>
+                                        <input type="file" name="file2">
+                                    </span>
+                                    <a href="#" class="btn btn-primary fileupload-exists" data-dismiss="fileupload">Remove</a>
+                                </div>
+                            </div>
+
+                            <div class="fileupload fileupload-new" data-provides="fileupload">
+                                <div class="fileupload-preview thumbnail"></div>
+                                <div>
+                                    <span class="btn btn-primary btn-file">
+                                        <span class="fileupload-new">Select image</span>
+                                        <span class="fileupload-exists">Change</span>
+                                        <input type="file" name="file3">
+                                    </span>
+                                    <a href="#" class="btn btn-primary fileupload-exists" data-dismiss="fileupload">Remove</a>
+                                </div>
+                            </div>
+
+                            <div class="fileupload fileupload-new" data-provides="fileupload">
+                                <div class="fileupload-preview thumbnail"></div>
+                                <div>
+                                    <span class="btn btn-primary btn-file">
+                                        <span class="fileupload-new">Select image</span>
+                                        <span class="fileupload-exists">Change</span>
+                                        <input type="file" name="file4">
+                                    </span>
+                                    <a href="#" class="btn btn-primary fileupload-exists" data-dismiss="fileupload">Remove</a>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+
+                            <hr>
+                            <div class="form-inline">
+                                I am an &nbsp;&nbsp;
+                                <div class="form-group">
+                                    <input class="form-check-input" type="radio" name="lister" id="inlineRadio1" value="Agent">
+                                    <label class="form-check-label" for="inlineRadio1">Agent</label>
+                                </div>&nbsp;&nbsp;
+                                <div class="form-group">
+                                    <input class="form-check-input" type="radio" name="lister" id="inlineRadio2" value="Agency">
+                                    <label class="form-check-label" for="inlineRadio2">Agency</label>
+                                </div>&nbsp;&nbsp;
+                                <div class="form-group">
+                                    <input class="form-check-input" type="radio" name="lister" id="inlineRadio3" value="Owner">
+                                    <label class="form-check-label" for="inlineRadio3">Owner</label>
+                                </div>
+                            </div>
+
+
+                            <hr>
+
+                            <button type="submit" class="btn btn-primary">SEND DETAILS</button>
+                        </form><!-- end search form -->
+                    </div><!-- end property_wrapper -->
+                </div><!-- end content -->
+
+                <div id="right_sidebar" class="col-lg-3 col-md-3 col-sm-3 col-xs-12 last clearfix">
+
+                    <div class="widget clearfix">
+                        <div class="agents_widget">
+                            <div class="title"><h3><i class="fa fa-users"></i> Our Agents</h3></div>
+                            <div class="agent boxes clearfix">
+                                <div class="image">
+                                    <img class="img-circle img-responsive img-thumbnail" src="demos/01_team.png" alt="">
+                                </div><!-- image -->
+                                <div class="agent_desc">
+                                    <h3 class="title">Mustapha COLLIENS</h3>
+                                    <p><span><i class="fa fa-envelope"></i> info@yoursite.com</span></p>
+                                    <p><span><i class="fa fa-phone-square"></i> +90 333 444 55 66</span></p>
+                                </div><!-- agento desc -->
+                            </div>
+                        </div><!-- end of agents_widget -->
+                    </div><!-- end of widget -->
+                    <div class="widget clearfix">
+                        <div class="title"><h3>Banner Ads</h3></div>
+                        Ads go here
+                    </div><!-- end of widget -->
+                </div><!-- end sidebar -->
+
+            </div><!-- end row -->
+        </div><!-- end container -->
+    </section>
+{% endblock %}
+{% block js %}
+    <script>
+    $(function () {
+        $('#id_acquisition').change(function () {
+            var value = $(this).val();
+            if(value === 'Rent'){
+                $("#rent_duration").prop('hidden', false);
+                $("#duration").prop('required', true);
+            }else if(value === 'Sale'){
+                 $("#rent_duration").prop('hidden', true);
+                 $("#duration").prop('required', false);
+            }else{
+                 $("#rent_duration").prop('hidden', true);
+                 $("#duration").prop('required', false);
+            }
+        })
+    })
+    </script>
+    <script>
+    function autocomplete(inp, arr) {
+        /*the autocomplete function takes two arguments,
+        the text field element and an array of possible autocompleted values:*/
+        var currentFocus;
+        /*execute a function when someone writes in the text field:*/
+        inp.addEventListener("input", function (e) {
+            var a, b, i, val = this.value;
+            /*close any already open lists of autocompleted values*/
+            closeAllLists();
+            if (!val) { return false; }
+            currentFocus = -1;
+            /*create a DIV element that will contain the items (values):*/
+            a = document.createElement("DIV");
+            a.setAttribute("id", this.id + "autocomplete-list");
+            a.setAttribute("class", "autocomplete-items");
+            /*append the DIV element as a child of the autocomplete container:*/
+            this.parentNode.appendChild(a);
+            /*for each item in the array...*/
+            for (i = 0; i < arr.length; i++) {
+                /*check if the item starts with the same letters as the text field value:*/
+                if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                    /*create a DIV element for each matching element:*/
+                    b = document.createElement("DIV");
+                    /*make the matching letters bold:*/
+                    b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+                    b.innerHTML += arr[i].substr(val.length);
+                    /*insert a input field that will hold the current array item's value:*/
+                    b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+                    /*execute a function when someone clicks on the item value (DIV element):*/
+                    b.addEventListener("click", function (e) {
+                        /*insert the value for the autocomplete text field:*/
+                        inp.value = this.getElementsByTagName("input")[0].value;
+                        /*close the list of autocompleted values,
+                        (or any other open lists of autocompleted values:*/
+                        closeAllLists();
+                    });
+                    a.appendChild(b);
+                }
+            }
+        });
+        /*execute a function presses a key on the keyboard:*/
+        inp.addEventListener("keydown", function (e) {
+            var x = document.getElementById(this.id + "autocomplete-list");
+            if (x) x = x.getElementsByTagName("div");
+            if (e.keyCode == 40) {
+                /*If the arrow DOWN key is pressed,
+                increase the currentFocus variable:*/
+                currentFocus++;
+                /*and and make the current item more visible:*/
+                addActive(x);
+            } else if (e.keyCode == 38) { //up
+                /*If the arrow UP key is pressed,
+                decrease the currentFocus variable:*/
+                currentFocus--;
+                /*and and make the current item more visible:*/
+                addActive(x);
+            } else if (e.keyCode == 13) {
+                /*If the ENTER key is pressed, prevent the form from being submitted,*/
+                e.preventDefault();
+                if (currentFocus > -1) {
+                    /*and simulate a click on the "active" item:*/
+                    if (x) x[currentFocus].click();
+                }
+            }
+        });
+        function addActive(x) {
+            /*a function to classify an item as "active":*/
+            if (!x) return false;
+            /*start by removing the "active" class on all items:*/
+            removeActive(x);
+            if (currentFocus >= x.length) currentFocus = 0;
+            if (currentFocus < 0) currentFocus = (x.length - 1);
+            /*add class "autocomplete-active":*/
+            x[currentFocus].classList.add("autocomplete-active");
+        }
+        function removeActive(x) {
+            /*a function to remove the "active" class from all autocomplete items:*/
+            for (var i = 0; i < x.length; i++) {
+                x[i].classList.remove("autocomplete-active");
+            }
+        }
+        function closeAllLists(elmnt) {
+            /*close all autocomplete lists in the document,
+            except the one passed as an argument:*/
+            var x = document.getElementsByClassName("autocomplete-items");
+            for (var i = 0; i < x.length; i++) {
+                if (elmnt != x[i] && elmnt != inp) {
+                    x[i].parentNode.removeChild(x[i]);
+                }
+            }
+        }
+        /*execute a function when someone clicks in the document:*/
+        document.addEventListener("click", function (e) {
+            closeAllLists(e.target);
+        });
+    }
+    var towns = {{ towns | safe}};
+
+    autocomplete(document.getElementById('id_town'), towns)
+</script>
+
+{% endblock %}

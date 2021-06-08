@@ -1,0 +1,131 @@
+{% extends 'layouts/user.html' %}
+{% load humanize %}
+{% load estate_tags %}
+{% block title %}
+    Home Page
+{% endblock %}
+{% block banner %}
+    <section id="one-parallax" class="parallax" style="background-image: url('#');" data-stellar-background-ratio="0.6" data-stellar-vertical-offset="20">
+        <div class="mapandslider">
+            <div class="overlay1 dm-shadow">
+                <div class="container">
+                    <div class="row">
+                        {% if first_ad %}
+                            <div class="col-lg-12 col-md-12 col-sm-12 text-center" style="margin-bottom: 20px">
+                                <a href="{{ first_ad.website }}" target="_blank"><img src="{{ first_ad.image.url }}" style="width: 60%; height: 10% !important" ></a>
+                            </div>
+                        {% endif %}
+
+                        <div class="col-lg-8 col-md-8 col-sm-12">
+                            <div id="property-slider" class="clearfix">
+                                <div class="flexslider">
+                                    <ul class="slides">
+                                        {% for mv in most_visited %}
+                                            <li>
+                                                <div class="desc">
+                                                    <div class="ps-desc">
+                                                        <h3><a href="">{{ mv.category }} for {{ mv.acquisition_type }} at {{ mv.town }}, {{ mv.region }}</a></h3>
+                                                        <p>{{ mv.description }}</p>
+                                                        <a title="click to find all {{ mv.category }}" href="{% url 'estate:filter-property' %}?category={{ mv.category }}" class="type">{{ mv.category }}</a>
+                                                        <span class="price">Ghs {% if mv.acquisition_type == 'Rent' %}{{ mv.for_rent_amount | intcomma }}{% else %}{{ mv.for_sale_amount | intcomma }}{% endif %}</span>
+                                                        <a title="click to find all {{ mv.acquisition_type }}" href="/house/house/filter?acquisition_type={{ mv.acquisition_type }}" class="status">{{ mv.acquisition_type }}</a>
+                                                    </div>
+                                                </div>
+                                                <a href="#"><img src=/media/{{ mv.images.all.0 }} alt=""></a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul><!-- end slides -->
+                                </div><!-- end flexslider -->
+                            </div><!-- end property-slider -->
+                        </div><!-- end col-lg-8 -->
+
+                        <div class="col-lg-4 col-md-4 col-sm-12">
+                            {% dashboard_filter %}
+                        </div><!-- end col-lg-4 -->
+                    </div><!-- end row -->
+                </div><!-- end dm_container -->
+            </div>
+        </div>
+    </section><!-- end mapandslider -->
+{% endblock %}
+{% block contents %}
+    <section id="three-parallax" class="parallax" style="background-image: url('demos/02_parallax.jpg');" data-stellar-background-ratio="0.6" data-stellar-vertical-offset="20">
+        <div class="threewrapper">
+            <div class="overlay1 dm-shadow">
+                <div class="container">
+                    <div class="row">
+                        <div class="text-center clearfix">
+                            <h3 class="big_title">Houses</h3>
+                        </div>
+                        <div class="col-md-12 col-sm-12 col-lg-12">
+                            <div class="row">
+                                {% for house in houses %}
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                        <div class="boxes" data-effect="slide-bottom">
+                                            <div class="ImageWrapper boxes_img">
+                                                <img class="img-responsive" src="/media/{{ house.images.all.0 }}" alt="">
+                                                <div class="ImageOverlayH"></div>
+                                                <div class="Buttons StyleMg">
+                                                <span class="WhiteSquare"><a class="fancybox" href="/media/{{ house.images.all.0 }}"><i class="fa fa-search"></i></a>
+                                                </span>
+                                                    <span class="WhiteSquare"><a href="{% url 'estate:website_house_details'  house.uuid %}"><i class="fa fa-link"></i></a>
+                                                </span>
+                                                </div>
+                                                <div class="box_type">Ghs {% if house.acquisition_type == 'Rent' %}{{ house.amount | intcomma }}{% else %}{{ house.amount | intcomma }}{% endif %}</div>
+                                                <div class="status_type">{{ house.acquisition_type }}</div>
+                                            </div>
+                                            <h2 class="title"><a href="{% url 'estate:website_house_details'  house.uuid %}"> {{ house.description }}</a> <small class="small_title">{{ house.town }}, {{ house.region }}</small></h2>
+
+                                            <div class="boxed_mini_details1 clearfix">
+                                                <span class="bedrooms first"><strong>Bed</strong><i class="icon-bed"></i> {{ house.number_of_bedrooms }}</span>
+                                                <span class="status"><strong>Baths</strong><i class="icon-bath"></i> {{ house.number_of_washrooms }}</span>
+                                                <span class="sqft"><strong>Kitchens</strong><i class="icon-sqft"></i> {{ house.number_of_kitchen }}</span>
+                                                <span class="garage last"><strong>Garage</strong><i class="icon-garage"></i> {% if house.has_garage %}Yes{% else %}No{% endif %}</span>
+                                            </div>
+                                        </div><!-- end boxes -->
+                                    </div>
+                                {% empty %}
+                                    There is nothing to show here
+                                {% endfor %}
+                            </div>
+                            <a href="{% url 'houses' %}" class="btn btn-sm btn-info">View ALL</a>
+                        </div>
+                        <div class="text-center clearfix">
+                            <h3 class="big_title">Lands</h3>
+                        </div>
+                        <div class="col-md-12 col-sm-12 col-lg-12">
+                            <div class="row">
+                                {% for land in lands %}
+                                    <div class="col-lg-3 col-md-3 col-sm-3">
+                                        <div class="boxes">
+                                            <div class="boxes_img ImageWrapper">
+                                                <a href="single-property.html">
+                                                    <img class="img-responsive" src="/media/{{ land.images.all.0 }}" alt="">
+                                                    <div class="PStyleNe"></div>
+                                                </a>
+                                                <div class="box_type">Ghs {{ land.amount }}</div>
+                                            </div>
+                                            <h2 class="title"><a href="single-property.html"> {{ land.land_type }} for {{ land.acquisition_type }} at {{ land.town }}, {{ land.region }}</a></h2>
+                                            <div class="boxed_mini_details clearfix">
+                                                <small class="small_title">{% if land.is_active %}<span class="badge badge-success">Active</span>{% elif  not land.is_active %}<span class="badge badge-warning">Inactive</span>{% endif %}</small>
+                                                <span class="area first"><strong>Size</strong> {{ land.size }} {{ land.unit }}</span>
+                                            </div>
+                                        </div><!-- end boxes -->
+                                    </div>
+                                {% empty %}
+                                    There is nothing to show here
+                                {% endfor %}
+                            </div>
+                            <a href="{% url 'lands' %}" class="btn btn-sm btn-info">View ALL</a>
+                        </div>
+                        {% if second_ad %}
+                            <div class="col-lg-12 col-md-12 col-sm-12 text-center" style="margin-bottom: 20px ">
+                                <a href="{{ second_ad.website }}" target="_blank"><img src="{{ second_ad.image.url }}" style="width: 60%; height: 10% !important" ></a>
+                            </div>
+                        {% endif %}
+                    </div><!-- end row -->
+                </div><!-- end container -->
+            </div><!-- end overlay1 -->
+        </div><!-- end threewrapper -->
+    </section>
+{% endblock %}

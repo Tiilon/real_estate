@@ -1,0 +1,200 @@
+{% extends 'layouts/admin.html' %}
+{% block title %}
+    Advertisement
+{% endblock %}
+{% block page_title %}
+    Advertisement
+{% endblock %}
+{% block contents %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button class="close" type="button" data-dismiss="alert" aria-label="Close"><span class="font-weight-light" aria-hidden="true">×</span></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="card">
+        <div class="card-header">
+            <div class="row align-items-center justify-content-between">
+                <div class="col-auto">
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">All</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Active</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Expired</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-auto">
+                    <button class="btn btn btn-falcon-default btn-sm" data-toggle="modal" data-target="#newModal">New</button>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped">
+                            <thead>
+                            <tr>
+                                <th>Company</th>
+                                <th>Website</th>
+                                <th>Ad Page</th>
+                                <th>Status</th>
+                                <th>Duration</th>
+                                <th>Periods</th>
+                                <th>Clicks</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for all in all_objects %}
+                                <tr>
+                                    <td>{{ all.company }}</td>
+                                    <td>{{ all.website }}</td>
+                                    <td>{{ all.get_page_display }}</td>
+                                    <td>{% if all.is_active %}Active{% else %}Inactive{% endif %}</td>
+                                    <td>{{ all.get_duration_display }}</td>
+                                    <td>{{ all.start_date }} - {{ all.end_date }}</td>
+                                    <td>{{ all.click_counts }}</td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="7">No ads yet</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped">
+                            <thead>
+                            <tr>
+                                <th>Company</th>
+                                <th>Website</th>
+                                <th>Ad Page</th>
+                                <th>Status</th>
+                                <th>Duration</th>
+                                <th>Periods</th>
+                                <th>Clicks</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for all in runnings %}
+                                <tr>
+                                    <td>{{ all.company }}</td>
+                                    <td>{{ all.website }}</td>
+                                    <td>{{ all.get_page_display }}</td>
+                                    <td>{% if all.is_active %}Active{% else %}Inactive{% endif %}</td>
+                                    <td>{{ all.get_duration_display }}</td>
+                                    <td>{{ all.start_date }} - {{ all.end_date }}</td>
+                                    <td>{{ all.click_counts }}</td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="7">No ads yet</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped">
+                            <thead>
+                            <tr>
+                                <th>Company</th>
+                                <th>Website</th>
+                                <th>Ad Page</th>
+                                <th>Status</th>
+                                <th>Duration</th>
+                                <th>Periods</th>
+                                <th>Clicks</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for all in expires %}
+                                <tr>
+                                    <td>{{ all.company }}</td>
+                                    <td>{{ all.website }}</td>
+                                    <td>{{ all.get_page_display }}</td>
+                                    <td>{% if all.is_active %}Active{% else %}Inactive{% endif %}</td>
+                                    <td>{{ all.get_duration_display }}</td>
+                                    <td>{{ all.start_date }} - {{ all.end_date }}</td>
+                                    <td>{{ all.click_counts }}</td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="7">No ads yet</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal modal-fixed-right fade" id="newModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalRightLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-vertical" role="document">
+            <div class="modal-content border-0 min-vh-100">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalRightLabel">New Advert</h5><button class="close" type="button" data-dismiss="modal" aria-label="Close"><span class="font-weight-light" aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body py-5 text-center">
+                    <form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+                        <div class="form-group">
+                            <label for="id_company">Company</label>
+                            <input type="text" name="company" id="id_company" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="id_website">Website</label>
+                            <input type="url" name="website" id="id_website" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="id_image">Ad Image</label>
+                            <input type="file" name="image" id="id_image" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="id_page">Ad Page</label>
+                            <select name="page" id="id_page" class="custom-select" required>
+                                <option value="">Select Page</option>
+                                <option value="HP">Home Page</option>
+                                <option value="LDP">Land Details Page</option>
+                                <option value="HDP">House Details Page</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="id_page">Ad Duration</label>
+                            <select name="duration" id="id_page" class="custom-select" required>
+                                <option value="">Select Duration</option>
+                                <option value="1">One Week</option>
+                                <option value="2">Two Weeks</option>
+                                <option value="3">One Month</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="id_start_date">Start Date</label>
+                            <input type="date" name="start_date" id="id_start_date" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="id_amount">GHs</label>
+                            <input type="number" name="amount" id="id_amount" step="any" class="form-control" placeholder="Amount.." required>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-block btn-falcon-success">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

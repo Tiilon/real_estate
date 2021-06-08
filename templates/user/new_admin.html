@@ -1,0 +1,112 @@
+{% extends 'layouts/admin.html' %}
+{% load static %}
+{% block title %}
+    New Admin
+{% endblock %}
+{% block page_title %}
+    New Admin
+{% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'profile/style.css' %}">
+{% endblock %}
+{% block script %}
+    <script src="{% static 'profile/script.js' %}"></script>
+{% endblock %}
+{% block contents %}
+    <form method="post" action="" enctype="multipart/form-data">{% csrf_token %}
+        {% if messages %}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                {% for message in messages %}
+                    <strong>Errors!!</strong> {{ message }}
+                {% endfor %}
+                <button class="close" type="button" data-dismiss="alert" aria-label="Close"><span class="font-weight-light" aria-hidden="true">×</span></button>
+            </div>
+        {% endif %}
+        <div class="row">
+            <div class="col-md-6 col-lg-6">
+                <div class="card h-100">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0">Profile</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="container-frame">
+                            <div class="avatar-upload">
+                                <div class="avatar-edit">
+                                    <input type="file" name="file" id="imageUpload" accept=".png, .jpg, .jpeg">
+                                    <label for="imageUpload" class="labels"></label>
+                                </div>
+                                <div class="avatar-preview">
+                                    <div id="imagePreview" style="background-image: url({% static 'assets/img/profile.png' %});"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="id_first">First Name</label>
+                            <input class="form-control" required type="text" name="first_name" placeholder="Enter first name..." id="id_first">
+                        </div>
+                        <div class="form-group">
+                            <label for="id_last">Last Name</label>
+                            <input class="form-control" required type="text" name="last_name" placeholder="Enter last name..." id="id_last">
+                        </div>
+                        <div class="form-group">
+                            <label for="id_last">Email</label>
+                            <input class="form-control" required type="email" name="email" placeholder="Enter email address..." id="id_last">
+                        </div>
+
+                        <div class="form-group"><label for="gender">Gender</label><select class="form-control custom-select" required id="gender" name="gender">
+                            <option value="">Select your gender ...</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-6">
+                <div class="card h-100">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0">Permissions</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table-borderless table">
+                                <thead>
+                                <tr align="center">
+                                    <th></th>
+                                    <th>Read</th>
+                                    <th>Write</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>User</td>
+                                    <td align="center">
+                                        <input type="checkbox" name="user.view_user" class="custom-checkbox">
+                                    </td>
+                                    <td align="center">
+                                        <input type="checkbox" name="user.change_user" class="custom-checkbox">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>House</td>
+                                    <td align="center">
+                                        <input type="checkbox" name="estate.view_house" class="custom-checkbox">
+                                    </td>
+                                    <td align="center">
+                                        <input type="checkbox" name="estate.change_house" class="custom-checkbox">
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group mt-4">
+            <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    </form>
+{% endblock %}

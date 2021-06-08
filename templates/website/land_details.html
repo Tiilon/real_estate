@@ -1,0 +1,193 @@
+{% extends 'layouts/user.html' %}
+{% load static %}
+{% block banner %}
+    <section class="post-wrapper-top dm-shadow clearfix">
+        <div class="container">
+            <div class="post-wrapper-top-shadow">
+                <span class="s1"></span>
+            </div>
+            <div class="col-lg-12">
+                <ul class="breadcrumb">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="#">Pages</a></li>
+                    <li>Land Details</li>
+                </ul>
+                <h2>Details</h2>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+{% block contents %}
+    <section class="generalwrapper dm-shadow clearfix">
+        <div class="container">
+            <div class="row">
+                <div id="left_sidebar" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 first clearfix">
+                    <div class="widget clearfix">
+                        <div class="title"><h3>Banner Ads</h3></div>
+                        <a href="#"><img src="demos/03_banner.png" alt="" class="img-thumbnail img-responsive"></a>
+                    </div><!-- end widget -->
+
+                </div><!-- #left_sidebar -->
+
+                <div id="content" class="col-lg-7 col-md-6 col-sm-6 col-xs-12 clearfix">
+                    <div class="property_wrapper boxes clearfix">
+                        <div class="boxes_img">
+                            <div id="slider" class="flexslider clearfix">
+                                <ul class="slides">
+                                    {% for image in land.images.all %}
+                                        <li><img class="img-thumbnail" src="{{ image.file.url }}" alt=""></li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            <div id="carousel" class="flexslider clearfix">
+                                <ul class="slides">
+                                    {% for image in land.images.all %}
+                                        <li><img class="img-thumbnail" src="{{ image.file.url }}" alt=""></li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div><!-- boxes_img -->
+
+                        <hr>
+
+                        <div class="title clearfix">
+                            <span class="agent_img pull-right"><a data-placement="bottom" data-toggle="tooltip" data-original-title={{ land.created_by.get_full_name }} title="" href="{% url 'user:web_user_details' land.created_by.uuid %}"><img width="75" class="img-responsive img-thumbnail" src="{% if land.created_by.profile %}{{ land.object.created_by.profile.url }}{% else %}{% static 'assets/img/profile.png'%}{% endif %}" alt=""></a></span>
+                            {{ land.page_views.count }} views | {% if land.created_by == user and land.is_active %}<span class="badge badge-success">Active</span>{% elif  land.created_by == user and not land.is_active %}<span class="badge badge-warning">Inactive</span>{% endif %}
+                            <h3>{{ land.category }} for {{ land.acquisition_type }} at {{ land.town }}, {{ land.region }}
+                                <small class="small_title">{{ land.town }}, {{ land.region }}<mark>{% if land.acquisition_type == 'Rent' %}{{ land.amount }}/month {% else %}{{ land.amount }}{% endif %}</mark>{% if land.acquisition_type == 'Rent' %}({{ land.rent_duration }} advance){% endif %}</small>
+                            </h3>
+                        </div><!-- end title -->
+
+                        <div class="boxed_mini_details1 clearfix">
+                            <span class="type first"><strong>Size</strong><i >{{ land.size }} {{ land.unit }}</i></span>
+{#                            <span class="sqft"><strong>Kitchen</strong><i class="icon-sqft"></i> {{ house.number_of_kitchen }}</span>#}
+{#                            <span class="garage"><strong>Garage</strong><i class="icon-garage"></i> {% if house.has_garage %}Yes{% else %}No{% endif %}</span>#}
+{#                            <span class="bedrooms"><strong>Beds</strong><i class="icon-bed"></i> {{ house.number_of_bedrooms }}</span>#}
+{#                            <span class="status"><strong>Baths</strong><i class="icon-bath"></i> {{ house.number_of_washrooms }}</span>#}
+{#                            <span class="furnished"><strong>Furnish</strong><i class="icon-furnished"></i> {% if house.is_furnished %}Yes{% else %}No{% endif %}</span>#}
+{#                            <span class="pool last"><strong>Compound</strong><i class="icon-pool"></i> {% if house.has_compound %}Yes{% else %}No{% endif %}</span>#}
+                        </div><!-- end boxed_mini_details1 -->
+
+                        <div class="property_desc clearfix">
+
+                            <p>{{ land.description }}</p>
+
+
+                        </div>
+
+                        <hr>
+
+
+                    </div><!-- end property_wrapper -->
+
+                    <div class="agent_boxes boxes clearfix">
+                        {% if user.is_authenticated %}
+                            <div class="agent_details clearfix">
+                                <div class="col-lg-7 col-md-7 col-sm-12">
+                                    <div class="agents_widget">
+                                        <h3 class="big_title">{{ land.created_by.get_full_name }}<small>Total ({{ ahc }}) pieces of property</small></h3>
+                                        <div class="agencies_widget row">
+                                            <div class="col-lg-5 clearfix">
+                                                <img class="img-thumbnail img-responsive" src="{% if land.created_by.profile %}{{ land.object.created_by.profile.url }}{% else %}{% static 'assets/img/profile.png'%}{% endif %}" alt="">
+                                            </div><!-- end col-lg-5 -->
+                                            <div class="col-lg-7 clearfix">
+                                                <div class="agencies_meta clearfix">
+                                                    <span><i class="fa fa-envelope"></i> <a href="{{ land.created_by.email }}">{{ land.created_by.email }}</a></span>
+                                                    <span><i class="fa fa-phone-square"></i> {{ land.created_by.phone_number }}</span>
+                                                    {#                                                    <span><i class="fa fa-facebook-square"></i> <a href="#">facebook.com/tagline</a></span>#}
+                                                    {#                                                    <span><i class="fa fa-twitter-square"></i> <a href="#">twitter.com/tagline</a></span>#}
+                                                    {#                                                    <span><i class="fa fa-linkedin-square"></i> <a href="#">linkedin.com/tagline</a></span>#}
+                                                </div><!-- end agencies_meta -->
+
+                                            </div><!-- end col-lg-7 -->
+
+                                            <div class="clearfix"></div>
+
+                                            <hr>
+                                        </div><!-- end agencies_widget -->
+                                    </div><!-- agents_widget -->
+                                </div><!-- end col-lg-7 -->
+                                {% if user != land.created_by %}
+                                    <div class="col-lg-5 col-md-5 col-sm-12">
+                                        <h3 class="big_title">Contact Agent<small>Have a Question? Ask this Agent</small></h3>
+                                        <form action="#" id="agent_form">
+                                            <input type="text" class="form-control" placeholder="Name">
+                                            <input type="text" class="form-control" placeholder="Email">
+                                            <input type="text" class="form-control" placeholder="Phone">
+                                            <input type="text" class="form-control" placeholder="Subject">
+                                            <textarea class="form-control" rows="5" placeholder="Message goes here..."></textarea>
+                                            <button class="btn btn-primary">Send Message</button>
+                                        </form><!-- end search form -->
+                                    </div><!-- end col-lg-6 -->
+                                {% else %}
+                                    <div class="col-lg-5 col-md-5 col-sm-12">
+                                        <h3 class="big_title">Messages</h3>
+                                        <div class="list-group-flush">
+                                            <div class="list-group-item">From: <a href="">Sparrow</a></div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+
+
+
+                            </div><!-- end agent_details -->
+                        {% else %}
+                            <div class="col-lg-5 col-md-5 col-sm-12">
+                                <h3>click <a href="{% url 'user:login_register' %}?next={% url 'land:website_land_details' land.uuid %}">here</a> to login to view Agent contact</h3>
+                            </div>
+                        {% endif %}
+                    </div><!-- end agent_boxes -->
+
+                    <div class="property_wrapper boxes clearfix">
+                        <h3 class="big_title">Similar Properties</h3>
+                        <div class="row">
+                            {% for similar in similar_lands %}
+                             <div class="col-lg-4 col-md-6 col-sm-12 first">
+                                <div class="boxes">
+                                    <div class="boxes_img ImageWrapper">
+                                        <a href="{% url 'land:website_land_details' similar.uuid %}">
+                                            <img class="img-responsive" src="{{ similar.images.all.0 }}" alt="">
+                                            <div class="PStyleNe"></div>
+                                        </a>
+                                        <div class="box_type">GHc {{ similar.amount }}</div>
+                                    </div>
+                                    <h2 class="title"><a href="{% url 'estate:website_house_details' similar.uuid %}"> {{ similar.category }} for {{ similar.acquisition_type }} at {{ similar.town }}, {{ similar.region }}</a></h2>
+                                    <div class="boxed_mini_details clearfix">
+                                        <span class="bedrooms last"><strong>Beds</strong><i class="icon-bed"></i> {{ silmilar.size }} {{ similar.unit }}</span>
+                                    </div>
+                                </div><!-- end boxes -->
+                            </div>
+                            {% endfor %}
+
+
+                        </div><!-- end row -->
+                    </div>
+                </div><!-- end content -->
+
+                <div id="right_sidebar" class="col-lg-3 col-md-3 col-sm-3 col-xs-12 last clearfix">
+
+                    <div class="widget clearfix">
+                        <div class="agents_widget">
+                            <div class="title"><h3><i class="fa fa-users"></i> Our Agents</h3></div>
+                            <div class="agent boxes clearfix">
+                                <div class="image">
+                                    <img class="img-circle img-responsive img-thumbnail" src="demos/01_team.png" alt="">
+                                </div><!-- image -->
+                                <div class="agent_desc">
+                                    <h3 class="title">Mustapha COLLIENS</h3>
+                                    <p><span><i class="fa fa-envelope"></i> info@yoursite.com</span></p>
+                                    <p><span><i class="fa fa-phone-square"></i> +90 333 444 55 66</span></p>
+                                </div><!-- agento desc -->
+                            </div>
+                        </div><!-- end of agents_widget -->
+                    </div><!-- end of widget -->
+                    <div class="widget clearfix">
+                        <div class="title"><h3>Banner Ads</h3></div>
+                        <img data-effect="fade" class="text-center img-thumbnail img-responsive" src="demos/01_banner.png" alt="">
+                    </div><!-- end of widget -->
+                </div><!-- end sidebar -->
+
+            </div><!-- end row -->
+        </div><!-- end container -->
+    </section><!-- end generalwrapper -->
+{% endblock %}

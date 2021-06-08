@@ -1,0 +1,124 @@
+{% extends 'layouts/admin.html' %}
+{% block page_title %}
+    Activate Land
+{% endblock %}
+{% block title %}
+    Activate Land
+{% endblock %}
+{% block contents %}
+    <p><h6>Please provide the following documents</h6></p>
+
+    <div class="row mt-3">
+        <div class="col-md-6">
+            <form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+                <div class="file-drop-area mt-3">
+                    <input type="file" class="custom-file-input" id="customFile" name="docs" accept=".png, .jpg, .jpeg" multiple>
+                    <label class="custom-file-label" for="customFile">Upload Land Document</label>
+                </div>
+                <div id="divImageMediaPreview"> </div>
+{#                <hr>#}
+
+                <div class="custom-file mt-3">
+                    <input type="file" class="file-input" id="customFile2" name="lister_profile" accept=".png, .jpg, .jpeg" multiple>
+                    <label class="custom-file-label" for="customFile2">Upload Lister Profile</label>
+                </div>
+                <div id="divImageMediaPreview2"> </div>
+
+                <hr>
+                <div class="mt-3">
+                    <button type="submit" class="btn btn-sm btn-primary float-right">Activate</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+{% endblock %}
+{% block script %}
+    <script>
+        // Add the following code if you want the name of the file appear on select
+        $(".custom-file-input").on("change", function() {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        });
+    </script>
+    <script>
+        $(document).on('change', '.custom-file-input', function() {
+
+
+            var filesCount = $(this)[0].files.length;
+
+            var textbox = $(this).prev();
+
+            if (filesCount === 1) {
+                var fileName = $(this).val().split('\\').pop();
+                textbox.text(fileName);
+            } else {
+                textbox.text(filesCount + ' files selected');
+            }
+
+
+
+            if (typeof (FileReader) != "undefined") {
+                var dvPreview = $("#divImageMediaPreview");
+                dvPreview.html("");
+                $($(this)[0].files).each(function () {
+                    var file = $(this);
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        var img = $("<img />");
+                        img.attr("style", "width: 150px; height:100px; padding: 10px");
+                        img.attr("src", e.target.result);
+                        dvPreview.append(img);
+                    }
+                    reader.readAsDataURL(file[0]);
+                });
+            } else {
+                alert("This browser does not support HTML5 FileReader.");
+            }
+
+
+
+
+        });
+    </script>
+    <script>
+        $(document).on('change', '.file-input', function() {
+
+
+            var filesCount = $(this)[0].files.length;
+
+            var textbox = $(this).prev();
+
+            if (filesCount === 1) {
+                var fileName = $(this).val().split('\\').pop();
+                textbox.text(fileName);
+            } else {
+                textbox.text(filesCount + ' files selected');
+            }
+
+
+
+            if (typeof (FileReader) != "undefined") {
+                var dvPreview = $("#divImageMediaPreview2");
+                dvPreview.html("");
+                $($(this)[0].files).each(function () {
+                    var file = $(this);
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        var img = $("<img />");
+                        img.attr("style", "width: 150px; height:100px; padding: 10px");
+                        img.attr("src", e.target.result);
+                        dvPreview.append(img);
+                    }
+                    reader.readAsDataURL(file[0]);
+                });
+            } else {
+                alert("This browser does not support HTML5 FileReader.");
+            }
+
+
+
+
+        });
+    </script>
+{% endblock %}

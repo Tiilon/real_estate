@@ -1,0 +1,278 @@
+{% extends 'layouts/admin.html' %}
+{% load humanize %}
+{% block page_title %}
+    Property Details
+{% endblock %}
+{% block script %}
+    <script>
+        $(document).ready(function () {
+            $('.owl-carousel').owlCarousel({
+                items: 1,
+                loop: true,
+                nav: true,
+                dots: false,
+                margin: 10,
+            // { #autoplay: true, # }
+            // { #autoplayTimeout: 1000, # }
+            autoplayHoverPause: true
+        });
+        });
+    </script>
+    <script>
+        // Add the following code if you want the name of the file appear on select
+        $(".custom-file-input").on("change", function () {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        });
+    </script>
+    <script>
+        $(document).on('change', '.custom-file-input', function () {
+
+
+            var filesCount = $(this)[0].files.length;
+
+            var textbox = $(this).prev();
+
+            if (filesCount === 1) {
+                var fileName = $(this).val().split('\\').pop();
+                textbox.text(fileName);
+            } else {
+                textbox.text(filesCount + ' files selected');
+            }
+
+
+
+            if (typeof (FileReader) != "undefined") {
+                var dvPreview = $("#divImageMediaPreview");
+                dvPreview.html("");
+                $($(this)[0].files).each(function () {
+                    var file = $(this);
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        var img = $("<img />");
+                        img.attr("style", "width: 150px; height:100px; padding: 10px");
+                        img.attr("src", e.target.result);
+                        dvPreview.append(img);
+                    }
+                    reader.readAsDataURL(file[0]);
+                });
+            } else {
+                alert("This browser does not support HTML5 FileReader.");
+            }
+
+
+
+        });
+    </script>
+{% endblock %}
+{% block contents %}
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <div class="product-slider position-relative">
+                        <div class="owl-carousel owl-theme position-lg-absolute l-0 t-0 h-100 product-images"data-owl-carousel-controller=".product-thumbs"data-options='{"items":{{ house.images.count }},"nav":true,"dots":false,"slideBy":1}'>
+                            {% for image in house.images.all %}
+                                <div class="item h-100"><img class="rounded h-100 fit-cover" src="{{ image.file.url }}" alt="">
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <h5>{{ house.category }} for {{ house.acquisition_type }} at {{ house.town }}, {{ house.region }}</h5><a
+                        class="fs--1 mb-2 d-block" href="#!">{{ house.created_by.get_full_name }}</a><a
+                        class="fs--2 mb-3 d-inline-block text-decoration-none" href="#review" data-tab-target="#review"
+                        data-fancyscroll data-offset="80"></a>
+                    <p>{{ house.description }}</p>
+                    <h4 class="d-flex align-items-center"><span class="text-warning mr-2">Ghs {{ house.amount | intcomma}}</span></h4>
+                    <p class="fs--1">Stock: <strong class="text-success">{% if house.is_active %} Active {% else %}Inactive{% endif %} | {{ house.get_status_display }}</strong></p>
+                    <p>
+                        {% if not house.is_active %}
+                        <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#exampleModalRight">Activate</button>
+                        {% else %}
+                        <form action="" method="post"> {%csrf_token%}
+                            <input type="hidden" name="form" value="deactivate">
+                            <button class="btn btn-primary" type="submit">Deactivate</button>
+                        </form>
+                        
+                        {% endif %}
+                    </p>
+                </div>
+
+
+                <div class="modal modal-fixed-right fade" id="exampleModalRight" tabindex="-1" role="dialog" aria-labelledby="exampleModalRightLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-vertical" role="document">
+                      <div class="modal-content border-0 min-vh-100">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalRightLabel">{% if not house.lister_profile%}Please provide the following documents{% else %}Requirements already exists<p>Please click the button to activate</p>{% endif %}</h5><button class="close" type="button" data-dismiss="modal" aria-label="Close"><span class="font-weight-light" aria-hidden="true">&times;</span></button>
+                        </div>
+                        <div class="modal-body py-5 text-center"><img class="img-fluid" src="../assets/img/illustrations/modal-right.png" alt="">
+                          <p class="mt-4">
+                            <form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+                                <input type="hidden" name="form" value="activate">
+                                {% if not house.lister_profile %}
+                                <div class="file-drop-area mt-3">
+                                    <input type="file" {% if not house.lister_profile%} required {% endif %}class="custom-file-input" id="customFile2" name="lister_profile" accept=".png, .jpg, .jpeg" multiple>
+                                    <label class="custom-file-label" for="customFile2">Upload Lister Profile</label>
+                                </div>
+                                {% endif %}
+                                <div id="divImageMediaPreview"> </div>
+                                <hr>
+                                <div class="mt-3">
+                                    <button type="submit" class="btn btn-sm btn-primary float-right">Activate</button>
+                                </div>
+
+                            </form>
+                            </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="fancy-tab overflow-hidden mt-4">
+                        <div class="nav-bar">
+                            <div class="nav-bar-item active pl-0 pr-2 pr-sm-4">
+                                <div class="mt-1 fs--1">Specifications</div>
+                            </div>
+                        </div>
+                        <div class="tab-contents">
+                            <div class="tab-content active">
+                                <table class="table table-bordered fs--1">
+                                    <tbody>
+                                    <tr>
+                                        <td class="bg-100" style="width: 30%;">Region</td>
+                                        <td>{{ house.region }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="bg-100" style="width: 30%;">Town</td>
+                                        <td>{{ house.town }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="bg-100" style="width: 30%;">Furnished</td>
+                                        <td>{% if house.is_furnished %}<i class="fa fa-check"></i>{% else %}<i
+                                                class="fal fa-window-close"></i>{% endif %}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="bg-100" style="width: 30%;">Compound</td>
+                                        <td>{% if house.has_compound %}<i class="fa fa-check"></i>{% else %}<i
+                                                class="fa fa-window-close"></i>{% endif %}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="bg-100" style="width: 30%;">Garage</td>
+                                        <td>{% if house.has_garage %}<i class="fa fa-check"></i>{% else %}<i
+                                                class="fal fa-window-close"></i>{% endif %}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="bg-100" style="width: 30%;">Number of bedrooms</td>
+                                        <td>{{ house.number_of_bedrooms }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="bg-100" style="width: 30%;">Number of washrooms</td>
+                                        <td>{{ house.number_of_washrooms }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="bg-100" style="width: 30%;">Number of kitchens</td>
+                                        <td>{{ house.number_of_kitchen }}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="tab-content">
+                                <table class="table table-bordered fs--1">
+                                    <tbody>
+                                    <tr>
+                                        <td class="bg-100" style="width: 30%;">Processor</td>
+                                        <td>2.3GHz quad-core Intel Core i5,</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="bg-100" style="width: 30%;">Memory</td>
+                                        <td>8GB of 2133MHz LPDDR3 onboard memory</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="bg-100" style="width: 30%;">Brand Name</td>
+                                        <td>Apple</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="bg-100" style="width: 30%;">Model</td>
+                                        <td>Mac Book Pro</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="bg-100" style="width: 30%;">Display</td>
+                                        <td>13.3-inch (diagonal) LED-backlit display with IPS technology</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="bg-100" style="width: 30%;">Storage</td>
+                                        <td>512GB SSD</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="bg-100" style="width: 30%;">Graphics</td>
+                                        <td>Intel Iris Plus Graphics 655</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="bg-100" style="width: 30%;">Weight</td>
+                                        <td>7.15 pounds</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="bg-100" style="width: 30%;">Finish</td>
+                                        <td>Silver, Space Gray</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="tab-content">
+                                <div class="row">
+                                    <div class="col-lg-6 mb-4 mb-lg-0">
+                                        <div class="mb-1"><span class="fa fa-star text-warning fs--1"></span><span
+                                                class="fa fa-star text-warning fs--1"></span><span
+                                                class="fa fa-star text-warning fs--1"></span><span
+                                                class="fa fa-star text-warning fs--1"></span><span
+                                                class="fa fa-star text-warning fs--1"></span><span
+                                                class="ml-3 text-dark font-weight-semi-bold">Awesome support, great code
+                                            😍</span></div>
+                                        <p class="fs--1 mb-2 text-600">By Drik Smith • October 14, 2019</p>
+                                        <p class="mb-0">You shouldn't need to read a review to see how nice and polished
+                                            this theme is. So I'll tell you something you won't find in the demo. After the
+                                            download I had a technical question, emailed the team and got a response right
+                                            from the team CEO with helpful advice.</p>
+                                        <hr class="my-4">
+                                        <div class="mb-1"><span class="fa fa-star text-warning fs--1"></span><span
+                                                class="fa fa-star text-warning fs--1"></span><span
+                                                class="fa fa-star text-warning fs--1"></span><span
+                                                class="fa fa-star text-warning fs--1"></span><span
+                                                class="fa fa-star-half-alt text-warning star-icon fs--1"></span><span
+                                                class="ml-3 text-dark font-weight-semi-bold">Outstanding Design, Awesome
+                                            Support</span></div>
+                                        <p class="fs--1 mb-2 text-600">By Liane • December 14, 2019</p>
+                                        <p class="mb-0">This really is an amazing template - from the style to the font -
+                                            clean layout. SO worth the money! The demo pages show off what Bootstrap 4 can
+                                            impressively do. Great template!! Support response is FAST and the team is
+                                            amazing - communication is important.</p>
+                                        <hr class="my-4">
+                                    </div>
+                                    <div class="col-lg-6 pl-lg-5">
+                                        <form>
+                                            <h5 class="mb-3">Write your Review</h5>
+                                            <div class="form-group"><label>Rating:</label>
+                                                <div class="raty"></div>
+                                            </div>
+                                            <div class="form-group"><label>Name:</label><input class="form-control"
+                                                                                               type="text"></div>
+                                            <div class="form-group"><label>Email:</label><input class="form-control"
+                                                                                                type="email"></div>
+                                            <div class="form-group"><label>Review:</label><textarea class="form-control"
+                                                                                                    rows="2"></textarea></div><button class="btn btn-primary"
+                                                                                                                                      type="submit">Submit</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,154 @@
+{% extends 'layouts/user.html' %}
+{% block banner %}
+    <section class="post-wrapper-top dm-shadow clearfix">
+        <div class="container">
+            <div class="post-wrapper-top-shadow">
+                <span class="s1"></span>
+            </div>
+            <div class="col-lg-12">
+                <ul class="breadcrumb">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="#">Pages</a></li>
+                    <li>Login and register page</li>
+                </ul>
+                <h2>Login or Register here</h2>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+{% block contents %}
+    <section class="generalwrapper dm-shadow clearfix">
+        <div class="container">
+        {% for message in messages %}
+        <span class="text-success pb-4">{{ message }}</span>
+        {% endfor %}
+            <div class="row">
+                <div id="left_sidebar" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 first clearfix">
+                    <div class="widget clearfix">
+                        <div class="title"><h3>Banner Ads</h3></div>
+                        <a href="#">No Ads at this time</a>
+                    </div><!-- end widget -->
+
+
+                </div><!-- #left_sidebar -->
+
+                <div id="content" class="col-lg-7 col-md-6 col-sm-6 col-xs-12 clearfix">
+
+                    <div class="col-lg-6 col-md-6 col-sm-12">
+                        <div class="widget clearfix">
+                            <div class="title">
+                                <h3>Login</h3>
+                            </div>
+                            <form  method="post"  action="">{% csrf_token %}
+                                {% if login_errors %}
+                                 <div class="alert alert-warning alert-dismissable">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                    <strong>Error!</strong> {{ login_errors }}
+                                </div>
+                                {% endif %}
+                                <input type="hidden" name="form" value="login">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                        <input type="text" required name="username" class="form-control" placeholder="Username or Email">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                                        <input type="password" required name="password" class="form-control" placeholder="Password">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox"> Remember me
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary">Sign in</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div><!-- end login -->
+
+                    <div class="col-lg-6 col-md-6 col-sm-12">
+                        <div class="widget clearfix">
+                            <div class="title">
+                                <h3>Register Form</h3>
+                            </div>
+                            <form  method="post"  action="">{% csrf_token %}
+                                 {% if register_errors %}
+                                 <div class="alert alert-warning alert-dismissable">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                    <strong>Error!</strong> {{ register_errors }}
+                                </div>
+                                {% endif %}
+                                <input type="hidden" name="form" value="register">
+                                <div class="form-group">
+                                    <input type="text" required name="first_name" class="form-control" placeholder="First name">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" required name="last_name" class="form-control" placeholder="Last name">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" required name="username" class="form-control" placeholder="Username">
+                                </div>
+                                <div class="form-group">
+                                    <select name="gender" required class="form-control">
+                                        <option value="">Gender</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" required name="address" class="form-control" placeholder="Address">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" required name="phone_number" class="form-control" placeholder="Phone Number">
+                                </div>
+                                <div class="form-group">
+                                    <input type="email" required name="email" class="form-control" placeholder="Email">
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" required name="password" class="form-control" placeholder="Password">
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" required name="password2" class="form-control" placeholder="Re-enter password">
+                                </div>
+                                <div class="form-group">
+                                    <input type="submit" class="btn btn-primary" value="Register an account">
+                                </div>
+                            </form>
+                        </div>
+                    </div><!-- end register -->
+                </div><!-- end content -->
+
+                <div id="right_sidebar" class="col-lg-3 col-md-3 col-sm-3 col-xs-12 last clearfix">
+
+                    <div class="widget clearfix">
+                        <div class="agents_widget">
+                            <div class="title"><h3><i class="fa fa-users"></i> Our Agents</h3></div>
+                            <div class="agent boxes clearfix">
+                                <div class="image">
+                                    <img class="img-circle img-responsive img-thumbnail" src="demos/01_team.png" alt="">
+                                </div><!-- image -->
+                                <div class="agent_desc">
+                                    <h3 class="title">Mustapha COLLIENS</h3>
+                                    <p><span><i class="fa fa-envelope"></i> info@yoursite.com</span></p>
+                                    <p><span><i class="fa fa-phone-square"></i> +90 333 444 55 66</span></p>
+                                </div><!-- agento desc -->
+                            </div>
+                        </div><!-- end of agents_widget -->
+                    </div><!-- end of widget -->
+                    <div class="widget clearfix">
+                        <div class="title"><h3>Banner Ads</h3></div>
+                        No Ads at this time
+                    </div><!-- end of widget -->
+                </div><!-- end sidebar -->
+
+            </div><!-- end row -->
+        </div><!-- end container -->
+    </section>
+{% endblock %}

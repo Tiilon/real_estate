@@ -1,0 +1,118 @@
+{% extends 'layouts/user.html' %}
+{% load humanize %}
+{% load bootstrap4 %}
+{% block title%}
+    Houses
+{% endblock %}
+{% block banner %}
+    <section class="post-wrapper-top dm-shadow clearfix">
+        <div class="container">
+            <div class="post-wrapper-top-shadow">
+                <span class="s1"></span>
+            </div>
+            <div class="col-lg-12">
+                <ul class="breadcrumb">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="#">Pages</a></li>
+                    <li>Houses</li>
+                </ul>
+                <h2>Houses</h2>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+{% block contents %}
+    <section class="generalwrapper dm-shadow clearfix">
+        <div class="container">
+            <div class="row">
+                <div id="left_sidebar" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 first clearfix">
+                    <div class="widget clearfix">
+                        <div class="title"><h3>Banner Ads</h3></div>
+                        {% if first_ad %}
+                            <a href="{{ first_ad.website }}"><img src="{{ first_ad.image.url }}" alt="" class="img-thumbnail img-responsive"></a>
+                        {% endif %}
+                    </div><!-- end widget -->
+
+                </div><!-- #left_sidebar -->
+
+                <div id="content" class="col-lg-7 col-md-6 col-sm-6 col-xs-12 clearfix">
+                    Showing {{ page_obj.start_index }} - {{ page_obj.end_index }} of {{ obj }} Houses
+                    <div class="clearfix">
+                        <div class="row">
+                            {% for object in page_obj %}
+                                <div class="col-lg-4 col-md-6 col-sm-6">
+                                    <div class="boxes">
+                                        <div class="boxes_img ImageWrapper">
+                                            <a href="{% url 'estate:website_house_details' object.uuid %}">
+                                                <img class="img-responsive" src="/media/{{ object.images.all.0 }}" alt="">
+                                                <div class="PStyleNe"></div>
+                                            </a>
+                                            <div class="box_type">GHs {{ object.amount | intcomma }}</div>
+                                        </div>
+                                        <h2 class="title"><a href="{% url 'estate:website_house_details' object.uuid %}"> {{ object.category }} for {{ object.acquisition_type }} at {{ object.town }}, {{ object.region }}</a></h2>
+                                        <div class="boxed_mini_details clearfix">
+                                            <span class="area first"><strong>Kitchens</strong><i class="icon-garage"></i> {{ object.number_of_kitchen }}</span>
+                                            <span class="status"><strong>Baths</strong><i class="icon-bath"></i> {{ object.number_of_washrooms }}</span>
+                                            <span class="bedrooms last"><strong>Beds</strong><i class="icon-bed"></i> {{ object.number_of_bedrooms }}</span>
+                                        </div>
+                                    </div><!-- end boxes -->
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="pagination_wrapper clearfix">
+                        <!-- Pagination Normal -->
+                        <ul class="pagination">
+                            {% if page_obj.has_previous %}
+                                <li><a href="?page=1">«</a></li>
+                                <li><a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a></li>
+                            {% else %}
+                                <li class="disabled"><a href="#"  type="button">«</a></li>
+                            {% endif %}
+                            <li class="active"><a href="#">{{ page_obj.number }}</a></li>
+                            {% if page_obj.has_next %}
+                                <li><a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a></li>
+                                <li><a href="?page={{ page_obj.paginator.num_pages  }}">»</a></li>
+                            {% else %}
+                                <li class="disabled"><a href="#">»</a></li>
+                            {% endif %}
+
+
+                        </ul>
+                    </div>
+
+                </div><!-- end content -->
+
+                <div id="right_sidebar" class="col-lg-3 col-md-3 col-sm-3 col-xs-12 last clearfix">
+                    <div class="widget clearfix">
+                        <div class="search_widget">
+                            <div class="title"><h3><i class="fa fa-search"></i> Filter Houses</h3></div>
+                            <form action="{% url 'estate:filter-property' %}" method="get">
+                                {% bootstrap_field filter.form.region %}
+                                {% bootstrap_field filter.form.acquisition_type %}
+                                {% bootstrap_field filter.form.category %}
+                                {% bootstrap_field filter.form.number_of_bedrooms %}
+                                {% bootstrap_field filter.form.number_of_washrooms %}
+                                {% bootstrap_field filter.form.min_price %}
+                                {% bootstrap_field filter.form.max_price %}
+                                {% bootstrap_field filter.form.listed_by %}
+                                <div class="form-group">
+                                    <button class="btn btn-block btn-secondary">Filter</button>
+                                </div>
+                            </form><!-- end search form -->
+                        </div><!-- end search_widget -->
+                    </div><!-- end widget -->
+
+                    <div class="widget clearfix">
+                        <div class="title"><h3>Banner Ads</h3></div>
+                        {% if second_ad %}
+                            <a href="{{ second_ad.website }}"><img data-effect="fade" class="text-center img-thumbnail img-responsive effect-fade" src="{{ second_ad.image.url }}" alt="" style="transition: all 0.7s ease-in-out 0s;"></a>
+                        {% endif %}
+                    </div><!-- end of widget -->
+                </div><!-- end sidebar -->
+
+            </div><!-- end row -->
+        </div><!-- end container -->
+    </section>
+{% endblock %}

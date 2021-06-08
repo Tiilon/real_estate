@@ -1,0 +1,144 @@
+{% extends 'layouts/admin.html' %}
+{% load static %}
+{% block page_title %}
+    {% if admin_user.profile %}
+        <img class="rounded-circle" height="100px" width="100px" src="{{ admin_user.profile.url }}">
+    {% else %}
+        <img class="rounded-circle" height="100px" width="100px" src="{% static 'assets/img/profile.png' %}">
+    {% endif %}
+
+{% endblock %}
+{% block contents %}
+    <div class="card mb-3">
+        <div class="card-header">
+            <div class="row">
+                <div class="col">
+                    <h5 class="mb-2">{{ admin_user.get_full_name }}</h5><a class="btn btn-falcon-default btn-sm" href="#!"><span class="fas fa-plus fs--2 mr-1"></span>Add note</a><button class="btn btn-falcon-default btn-sm dropdown-toggle ml-2 dropdown-caret-none" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="fas fa-ellipsis-h"></span></button>
+                    <div class="dropdown-menu"><a class="dropdown-item" href="#">Edit</a><a class="dropdown-item" href="#">Report</a><a class="dropdown-item" href="#">Archive</a>
+                        <div class="dropdown-divider"></div><a class="dropdown-item text-danger" href="#">Delete user</a>
+                    </div>
+                </div>
+                <div class="col-auto d-none d-sm-block">
+                    <h6 class="text-uppercase text-600">{{ admin_user.get_user_type_display }}<span class="fas fa-user ml-2"></span></h6>
+                </div>
+            </div>
+        </div>
+        <div class="card-body border-top">
+            <div class="media"><span class="fas fa-user text-success mr-2" data-fa-transform="down-5"></span>
+                <div class="media-body">
+                    <p class="mb-0">Date Joined</p>
+                    <p class="fs--1 mb-0 text-600">{{ admin_user.date_joined }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card mb-3">
+        <div class="card-header">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h5 class="mb-0">Details</h5>
+                </div>
+                <div class="col-auto"><a class="btn btn-falcon-default btn-sm" href="#!"><span class="fas fa-pencil-alt fs--2 mr-1"></span>Update details</a></div>
+            </div>
+        </div>
+        <div class="card-body bg-light border-top">
+            <div class="row">
+                <div class="col-lg col-xxl-5">
+                    <h6 class="font-weight-semi-bold ls mb-3 text-uppercase">Account Information</h6>
+                    <div class="row">
+                        <div class="col-5 col-sm-4">
+                            <p class="font-weight-semi-bold mb-1">First Name</p>
+                        </div>
+                        <div class="col">{{ admin_user.first_name }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-5 col-sm-4">
+                            <p class="font-weight-semi-bold mb-1">Last Name</p>
+                        </div>
+                        <div class="col">{{ admin_user.last_name }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-5 col-sm-4">
+                            <p class="font-weight-semi-bold mb-1">Gender</p>
+                        </div>
+                        <div class="col">{{ admin_user.gender }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-5 col-sm-4">
+                            <p class="font-weight-semi-bold mb-1">Email</p>
+                        </div>
+                        <div class="col"><a href="mailto:tony@gmail.com">{{ admin_user.email }}</a></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-5 col-sm-4">
+                            <p class="font-weight-semi-bold mb-1">Phone Number</p>
+                        </div>
+                        <div class="col">
+                            <p class="font-italic text-400 mb-1">{{ admin_user.phone_number }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg col-xxl-5 mt-4 mt-lg-0 offset-xxl-1">
+                    <h6 class="font-weight-semi-bold ls mb-3 text-uppercase">Status Information</h6>
+                    <div class="row">
+                        <div class="col-5 col-sm-4">
+                            <p class="font-weight-semi-bold mb-1">Is Active</p>
+                        </div>
+                        <div class="col">{% if admin_user.is_active %}Yes{% else %}No{% endif %}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {#            <div class="card-footer border-top text-right"><a class="btn btn-falcon-default btn-sm" href="#!"><span class="fas fa-dollar-sign fs--2 mr-1"></span>Refund</a><a class="btn btn-falcon-default btn-sm ml-2" href="#!"><span class="fas fa-check fs--2 mr-1"></span>Save changes</a></div>#}
+    </div>
+    {#          <div class="card">#}
+    {#            <div class="card-header">#}
+    {#              <h5 class="mb-0">Logs</h5>#}
+    {#            </div>#}
+    {#            <div class="card-body border-top p-0">#}
+    {#              <div class="row no-gutters align-items-center border-bottom py-2 px-3">#}
+    {#                <div class="col-md-auto pr-3"><span class="badge badge-soft-success badge-pill">200</span></div>#}
+    {#                <div class="col-md mt-1 mt-md-0"><code>POST /v1/invoiceitems</code></div>#}
+    {#                <div class="col-md-auto">#}
+    {#                  <p class="mb-0">2019/02/23 15:29:45</p>#}
+    {#                </div>#}
+    {#              </div>#}
+    {#              <div class="row no-gutters align-items-center border-bottom py-2 px-3">#}
+    {#                <div class="col-md-auto pr-3"><span class="badge badge-soft-warning badge-pill">400</span></div>#}
+    {#                <div class="col-md mt-1 mt-md-0"><code>POST /v1/invoiceitems</code></div>#}
+    {#                <div class="col-md-auto">#}
+    {#                  <p class="mb-0">2019/02/19 21:32:12</p>#}
+    {#                </div>#}
+    {#              </div>#}
+    {#              <div class="row no-gutters align-items-center border-bottom py-2 px-3">#}
+    {#                <div class="col-md-auto pr-3"><span class="badge badge-soft-success badge-pill">200</span></div>#}
+    {#                <div class="col-md mt-1 mt-md-0"><code>POST /v1/invoices/in_1Dnkhadfk</code></div>#}
+    {#                <div class="col-md-auto">#}
+    {#                  <p class="mb-0">2019/02/26 12:23:43</p>#}
+    {#                </div>#}
+    {#              </div>#}
+    {#              <div class="row no-gutters align-items-center border-bottom py-2 px-3">#}
+    {#                <div class="col-md-auto pr-3"><span class="badge badge-soft-success badge-pill">200</span></div>#}
+    {#                <div class="col-md mt-1 mt-md-0"><code>POST /v1/invoices/in_1Dnkhadfk</code></div>#}
+    {#                <div class="col-md-auto">#}
+    {#                  <p class="mb-0">2019/02/12 23:32:12</p>#}
+    {#                </div>#}
+    {#              </div>#}
+    {#              <div class="row no-gutters align-items-center border-bottom py-2 px-3">#}
+    {#                <div class="col-md-auto pr-3"><span class="badge badge-soft-danger badge-pill">404</span></div>#}
+    {#                <div class="col-md mt-1 mt-md-0"><code>POST /v1/invoices/in_1Dnkhadfk</code></div>#}
+    {#                <div class="col-md-auto">#}
+    {#                  <p class="mb-0">2019/02/08 02:20:23</p>#}
+    {#                </div>#}
+    {#              </div>#}
+    {#              <div class="row no-gutters align-items-center border-bottom py-2 px-3">#}
+    {#                <div class="col-md-auto pr-3"><span class="badge badge-soft-success badge-pill">200</span></div>#}
+    {#                <div class="col-md mt-1 mt-md-0"><code>POST /v1/invoices/in_1Dnkhadfk</code></div>#}
+    {#                <div class="col-md-auto">#}
+    {#                  <p class="mb-0">2019/02/01 12:29:34</p>#}
+    {#                </div>#}
+    {#              </div>#}
+    {#            </div>#}
+    {#            <div class="card-footer bg-light p-0"><a class="btn btn-link btn-block" href="#!">View more logs<span class="fas fa-chevron-right fs--2 ml-1"></span></a></div>#}
+    {#          </div>#}
+{% endblock %}

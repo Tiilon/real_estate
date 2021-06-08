@@ -1,0 +1,123 @@
+{% extends 'layouts/user.html' %}
+{% load humanize %}
+{% block contents %}
+    <section class="generalwrapper dm-shadow clearfix">
+        <div class="container">
+            <div class="row">
+                <div id="left_sidebar" class="col-lg-2 col-md-3 col-sm-3 col-xs-12 first clearfix">
+                    <div class="widget clearfix">
+                        <div class="title"><h3>Banner Ads</h3></div>
+                        Ads go here
+                    </div><!-- end widget -->
+
+                </div><!-- #left_sidebar -->
+
+                <div id="content" class="col-lg-7 col-md-6 col-sm-6 col-xs-12 clearfix">
+                    <div class="agent_boxes boxes clearfix">
+                        <div class="agent_details clearfix">
+                            <div class="col-lg-7 col-md-7 col-sm-12">
+                                <div class="agents_widget">
+                                    <h3 class="big_title">{{ web_user.get_full_name }}<small>Total ({{ total }}) pieces of property</small></h3>
+                                    <div class="agencies_widget row">
+                                        <div class="col-lg-5 clearfix">
+                                            <img class="img-thumbnail img-responsive" src="demos/01_team.png" alt="">
+                                        </div><!-- end col-lg-5 -->
+                                        <div class="col-lg-7 clearfix">
+                                            <div class="agencies_meta clearfix">
+                                                <span><i class="fa fa-envelope"></i> <a href="mailto:{{ web_user.email }}">{{ web_user.email }}</a></span>
+                                                {#                                                <span><i class="fa fa-link"></i> <a href="#">www.sitename.com</a></span>#}
+                                                <span><i class="fa fa-phone-square"></i> {{ web_user.phone_number }}</span>
+                                                <span><i class="fa fa-print"></i> {{ web_user.address }}</span>
+                                                <span><i class="fa fa-facebook-square"></i> <a href="#">facebook.com/tagline</a></span>
+                                                <span><i class="fa fa-twitter-square"></i> <a href="#">twitter.com/tagline</a></span>
+                                                <span><i class="fa fa-linkedin-square"></i> <a href="#">linkedin.com/tagline</a></span>
+                                            </div><!-- end agencies_meta -->
+
+                                        </div><!-- end col-lg-7 -->
+
+                                        <div class="clearfix"></div>
+
+                                        <hr>
+
+                                        <div class="col-lg-12">
+                                            <p>Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable.. Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free.</p>
+                                        </div>
+                                    </div><!-- end agencies_widget -->
+                                </div><!-- agents_widget -->
+                            </div><!-- end col-lg-7 -->
+
+                            <div class="col-lg-5 col-md-5 col-sm-12">
+                                <h3 class="big_title">Contact Agent<small>Have a Question? Ask this Agent</small></h3>
+                                <form action="#" id="agent_form">
+                                    <input type="text" class="form-control" placeholder="Name">
+                                    <input type="text" class="form-control" placeholder="Email">
+                                    <input type="text" class="form-control" placeholder="Phone">
+                                    <input type="text" class="form-control" placeholder="Subject">
+                                    <textarea class="form-control" rows="5" placeholder="Message goes here..."></textarea>
+                                    <button class="btn btn-primary">Send Message</button>
+                                </form><!-- end search form -->
+
+                            </div><!-- end col-lg-6 -->
+                        </div><!-- end agent_details -->
+                    </div><!-- end agent_boxes -->
+                    <div class="property_wrapper boxes clearfix">
+                        <h3 class="big_title">Recent Properties</h3>
+                        <h3><strong>HOUSES</strong></h3>
+                        <div class="row">
+                            {% for house in houses %}
+                                <div class="col-lg-4 col-md-6 col-sm-12">
+                                    <div class="boxes">
+                                        <div class="boxes_img ImageWrapper">
+                                            <a href="{% url 'estate:website_house_details' house.uuid %}">
+                                                <img class="img-responsive" src="/media/{{ house.images.all.0 }}" alt="">
+                                                <div class="PStyleNe"></div>
+                                            </a>
+                                            <div class="box_type">{{ house.amount }}</div>
+                                        </div>
+                                        <h2 class="title"><a href="{% url 'estate:website_house_details' house.uuid %}"> {{ house.category }} for {{ house.acquisition_type }} at {{ house.town }}, {{ house.region }}</a></h2>
+                                        <div class="boxed_mini_details clearfix">
+                                            <span class="area first"><strong>Kitchen</strong><i class="icon-garage"></i> {{ house.number_of_kitchen }}</span>
+                                            <span class="status"><strong>Baths</strong><i class="icon-bath"></i> {{ house.number_of_washrooms }}</span>
+                                            <span class="bedrooms last"><strong>Beds</strong><i class="icon-bed"></i> {{ house.number_of_bedrooms }}</span>
+                                        </div>
+                                    </div><!-- end boxes -->
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <h3><strong>LANDS</strong></h3>
+                        <div class="row">
+                            {% for land in lands %}
+                                <div class="col-lg-4 col-md-6 col-sm-12">
+                                    <div class="boxes">
+                                        <div class="boxes_img ImageWrapper">
+                                            <a href="{% url 'land:website_land_details' land.uuid %}">
+                                                <img class="img-responsive" src="/media/{{ land.images.all.0 }}" alt="">
+                                                <div class="PStyleNe"></div>
+                                            </a>
+                                            <div class="box_type">{{ land.amount }}</div>
+                                        </div>
+                                        <h2 class="title"><a href="{% url 'land:website_land_details' land.uuid %}">{{ land.category }} for {{ land.acquisition_type }} at {{ land.town }}, {{ land.region }}</a></h2>
+                                        <div class="boxed_mini_details clearfix">
+                                            <span class="area first"><strong>size</strong><i class="icon-garage"></i> {{ land.size }}</span>
+                                            <span class="status"><strong>unit</strong><i class="icon-bath"></i> {{ land.unit }}</span>
+                                            <span class="bedrooms last"><strong>Beds</strong><i class="icon-bed"></i> 4</span>
+                                        </div>
+                                    </div><!-- end boxes -->
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div><!-- end content -->
+
+                <div id="right_sidebar" class="col-lg-3 col-md-3 col-sm-3 col-xs-12 last clearfix">
+                    <div class="widget clearfix">
+                        <div class="title"><h3>Banner Ads</h3></div>
+                        Ads go here
+                    </div><!-- end of widget -->
+                </div><!-- end sidebar -->
+
+            </div><!-- end row -->
+        </div><!-- end container -->
+    </section><!-- end generalwrapper -->
+
+{% endblock %}

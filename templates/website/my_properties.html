@@ -1,0 +1,261 @@
+{% extends 'layouts/user.html' %}
+{% load humanize %}
+{% block properties %}
+    active
+{% endblock %}
+{% block banner %}
+    <section class="post-wrapper-top dm-shadow clearfix">
+        <div class="container">
+            <div class="post-wrapper-top-shadow">
+                <span class="s1"></span>
+            </div>
+            <div class="col-lg-12">
+                <ul class="breadcrumb">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="#">Pages</a></li>
+                    <li>My Properties</li>
+                </ul>
+                <h2>Properties</h2>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+{% block contents %}
+    <section class="generalwrapper dm-shadow clearfix">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 clearfix">
+                    <div id="tabbed_widget" class="tabbable clearfix" data-effect="slide-bottom">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#tab" data-toggle="tab">Houses</a></li>
+                            <li><a href="#tab2" data-toggle="tab">Land</a></li>
+                        </ul>
+                        <div class="tab-content tabbed_widget clearfix">
+                            <div class="tab-pane active" id="tab">
+                                {% for house in houses %}
+                                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                        <div class="boxes" data-effect="slide-bottom">
+                                            <div class="ImageWrapper boxes_img">
+                                                <img class="img-responsive" src="/media/{{ house.images.all.0 }}" alt="">
+                                                <div class="ImageOverlayH"></div>
+                                                <div class="Buttons StyleMg">
+                                                <span class="WhiteSquare"><a class="fancybox" href="/media/{{ house.images.all.0 }}"><i class="fa fa-search"></i></a>
+                                                </span>
+                                                    <span class="WhiteSquare"><a href="{% url 'estate:website_house_details' house.uuid %}"><i class="fa fa-link"></i></a>
+                                                </span>
+                                                </div>
+                                                <div class="box_type">Ghs {% if house.acquisition_type == 'Rent' %}{{ house.amount | intcomma }}{% else %}{{ house.amount | intcomma }}{% endif %}</div>
+                                                <div class="status_type">{{ house.acquisition_type }}</div>
+                                            </div>
+                                            <h2 class="title"><a href="{% url 'estate:website_house_details' house.uuid %}"> {{ house.category }} for {{ house.acquisition_type }} at {{ house.town }}, {{ house.region }}</a>
+                                                <small class="small_title">{% if house.is_active %}<span class="badge badge-success">Active</span>{% elif  not house.is_active %}<span class="badge badge-warning">Inactive</span>{% endif %}</small>
+                                            </h2>
+
+                                            <div class="boxed_mini_details1 clearfix">
+                                                <span class="bedrooms first"><strong>Bed</strong><i class="icon-bed"></i> {{ house.number_of_bedrooms }}</span>
+                                                <span class="status"><strong>Baths</strong><i class="icon-bath"></i> {{ house.number_of_washrooms }}</span>
+                                                <span class="sqft"><strong>Kitchens</strong><i class="icon-sqft"></i> {{ house.number_of_kitchen }}</span>
+                                                <span class="garage last"><strong>Garage</strong><i class="icon-garage"></i> {% if house.has_garage %}Yes{% else %}No{% endif %}</span>
+                                            </div>
+                                        </div><!-- end boxes -->
+                                    </div>
+                                {% empty %}
+                                    There is nothing to show here
+                                {% endfor %}
+                            </div><!-- tab pane-->
+
+                            <div class="tab-pane" id="tab2">
+                                {% for land in lands %}
+                                 <div class="col-lg-4 col-md-4 col-sm-4">
+                                    <div class="boxes">
+                                        <div class="boxes_img ImageWrapper">
+                                            <a href="single-property.html">
+                                                <img class="img-responsive" src="/media/{{ land.images.all.0 }}" alt="">
+                                                <div class="PStyleNe"></div>
+                                            </a>
+                                            <div class="box_type">Ghs {{ land.amount }}</div>
+                                        </div>
+                                        <h2 class="title"><a href="single-property.html"> {{ land.land_type }} for {{ land.acquisition_type }} at {{ land.town }}, {{ land.region }}</a></h2>
+                                        <div class="boxed_mini_details clearfix">
+                                            <small class="small_title">{% if land.is_active %}<span class="badge badge-success">Active</span>{% elif  not land.is_active %}<span class="badge badge-warning">Inactive</span>{% endif %}</small>
+                                            <span class="area first"><strong>Size</strong> {{ land.size }} {{ land.unit }}</span>
+                                        </div>
+                                    </div><!-- end boxes -->
+                                </div>
+                                {% empty %}
+                                    There is nothing to show here
+                                {% endfor %}
+
+                            </div><!-- tab pane -->
+
+                            <div class="tab-pane" id="tab5">
+                                <div class="col-lg-4 col-md-4 col-sm-4 first">
+                                    <div class="boxes">
+                                        <div class="boxes_img ImageWrapper">
+                                            <a href="single-property.html">
+                                                <img class="img-responsive" src="demos/06_home.png" alt="">
+                                                <div class="PStyleNe"></div>
+                                            </a>
+                                            <div class="box_type">$200.000</div>
+                                        </div>
+                                        <h2 class="title"><a href="single-property.html"> Two Week Holiday on Miami </a></h2>
+                                        <div class="boxed_mini_details clearfix">
+                                            <span class="area first"><strong>Garage</strong><i class="icon-garage"></i> 1</span>
+                                            <span class="status"><strong>Baths</strong><i class="icon-bath"></i> 3</span>
+                                            <span class="bedrooms last"><strong>Beds</strong><i class="icon-bed"></i> 1</span>
+                                        </div>
+                                    </div><!-- end boxes -->
+                                </div>
+
+                                <div class="col-lg-4 col-md-4 col-sm-4">
+                                    <div class="boxes">
+                                        <div class="boxes_img ImageWrapper">
+                                            <a href="single-property.html">
+                                                <img class="img-responsive" src="demos/04_home.jpg" alt="">
+                                                <div class="PStyleNe"></div>
+                                            </a>
+                                            <div class="box_type">$1.200.000</div>
+                                        </div>
+                                        <h2 class="title"><a href="single-property.html"> Executive Home</a></h2>
+                                        <div class="boxed_mini_details clearfix">
+                                            <span class="area first"><strong>Garage</strong><i class="icon-garage"></i> 1</span>
+                                            <span class="status"><strong>Baths</strong><i class="icon-bath"></i> 1</span>
+                                            <span class="bedrooms last"><strong>Beds</strong><i class="icon-bed"></i> 2</span>
+                                        </div>
+                                    </div><!-- end boxes -->
+                                </div>
+
+                                <div class="col-lg-4 col-md-4 col-sm-4 last">
+                                    <div class="boxes">
+                                        <div class="boxes_img ImageWrapper">
+                                            <a href="single-property.html">
+                                                <img class="img-responsive" src="demos/03_home.jpg" alt="">
+                                                <div class="PStyleNe"></div>
+                                            </a>
+                                            <div class="box_type">$2.200.500</div>
+                                        </div>
+                                        <h2 class="title"><a href="single-property.html"> Country side house exterior</a></h2>
+                                        <div class="boxed_mini_details clearfix">
+                                            <span class="area first"><strong>Garage</strong><i class="icon-garage"></i> 1</span>
+                                            <span class="status"><strong>Baths</strong><i class="icon-bath"></i> 2</span>
+                                            <span class="bedrooms last"><strong>Beds</strong><i class="icon-bed"></i> 3</span>
+                                        </div>
+                                    </div><!-- end boxes -->
+                                </div>
+
+                                <div class="col-lg-4 col-md-4 col-sm-4 first">
+                                    <div class="boxes">
+                                        <div class="boxes_img ImageWrapper">
+                                            <a href="single-property.html">
+                                                <img class="img-responsive" src="demos/05_home.png" alt="">
+                                                <div class="PStyleNe"></div>
+                                            </a>
+                                            <div class="box_type">$1.200.000</div>
+                                        </div>
+                                        <h2 class="title"><a href="single-property.html"> Ottoman Style Triplex</a></h2>
+                                        <div class="boxed_mini_details clearfix">
+                                            <span class="area first"><strong>Garage</strong><i class="icon-garage"></i> 1</span>
+                                            <span class="status"><strong>Baths</strong><i class="icon-bath"></i> 3</span>
+                                            <span class="bedrooms last"><strong>Beds</strong><i class="icon-bed"></i> 2</span>
+                                        </div>
+                                    </div><!-- end boxes -->
+                                </div>
+
+                                <div class="col-lg-4 col-md-4 col-sm-4">
+                                    <div class="boxes">
+                                        <div class="boxes_img ImageWrapper">
+                                            <a href="single-property.html">
+                                                <img class="img-responsive" src="demos/01_home.jpg" alt="">
+                                                <div class="PStyleNe"></div>
+                                            </a>
+                                            <div class="box_type">$3.200.100</div>
+                                        </div>
+                                        <h2 class="title"><a href="single-property.html"> Home of your dreams</a></h2>
+                                        <div class="boxed_mini_details clearfix">
+                                            <span class="area first"><strong>Garage</strong><i class="icon-garage"></i> 1</span>
+                                            <span class="status"><strong>Baths</strong><i class="icon-bath"></i> 2</span>
+                                            <span class="bedrooms last"><strong>Beds</strong><i class="icon-bed"></i> 2</span>
+                                        </div>
+                                    </div><!-- end boxes -->
+                                </div>
+
+                                <div class="col-lg-4 col-md-4 col-sm-4 last">
+                                    <div class="boxes">
+                                        <div class="boxes_img ImageWrapper">
+                                            <a href="single-property.html">
+                                                <img class="img-responsive" src="demos/08_home.png" alt="">
+                                                <div class="PStyleNe"></div>
+                                            </a>
+                                            <div class="box_type">$880.000</div>
+                                        </div>
+                                        <h2 class="title"><a href="single-property.html"> Modern Family House</a></h2>
+                                        <div class="boxed_mini_details clearfix">
+                                            <span class="area first"><strong>Area:</strong> 250m²</span>
+                                            <span class="status"><strong>Status:</strong> On Sale</span>
+                                            <span class="bedrooms last"><strong>Beds:</strong> 5</span>
+                                        </div>
+                                    </div><!-- end boxes -->
+                                </div>
+
+                                <div class="col-lg-4 col-md-4 col-sm-4 first">
+                                    <div class="boxes">
+                                        <div class="boxes_img ImageWrapper">
+                                            <a href="single-property.html">
+                                                <img class="img-responsive" src="demos/07_home.png" alt="">
+                                                <div class="PStyleNe"></div>
+                                            </a>
+                                            <div class="box_type">$134.999</div>
+                                        </div>
+                                        <h2 class="title"><a href="single-property.html"> Wooden Style Family Hose</a></h2>
+                                        <div class="boxed_mini_details clearfix">
+                                            <span class="area first"><strong>Garage</strong><i class="icon-garage"></i> 1</span>
+                                            <span class="status"><strong>Baths</strong><i class="icon-bath"></i> 1</span>
+                                            <span class="bedrooms last"><strong>Beds</strong><i class="icon-bed"></i> 2</span>
+                                        </div>
+                                    </div><!-- end boxes -->
+                                </div>
+
+                                <div class="col-lg-4 col-md-4 col-sm-4">
+                                    <div class="boxes">
+                                        <div class="boxes_img ImageWrapper">
+                                            <a href="single-property.html">
+                                                <img class="img-responsive" src="demos/09_home.png" alt="">
+                                                <div class="PStyleNe"></div>
+                                            </a>
+                                            <div class="box_type">$4200</div>
+                                        </div>
+                                        <h2 class="title"><a href="single-property.html"> One Week Istanbul Holiday</a></h2>
+                                        <div class="boxed_mini_details clearfix">
+                                            <span class="area first"><strong>Garage</strong><i class="icon-garage"></i> 1</span>
+                                            <span class="status"><strong>Baths</strong><i class="icon-bath"></i> 2</span>
+                                            <span class="bedrooms last"><strong>Beds</strong><i class="icon-bed"></i> 1</span>
+                                        </div>
+                                    </div><!-- end boxes -->
+                                </div>
+
+                                <div class="col-lg-4 col-md-4 col-sm-4 last">
+                                    <div class="boxes">
+                                        <div class="boxes_img ImageWrapper">
+                                            <a href="single-property.html">
+                                                <img class="img-responsive" src="demos/02_home.jpg" alt="">
+                                                <div class="PStyleNe"></div>
+                                            </a>
+                                            <div class="box_type">$4.200.00</div>
+                                        </div>
+                                        <h2 class="title"><a href="single-property.html"> Sea view duplex villa</a></h2>
+                                        <div class="boxed_mini_details clearfix">
+                                            <span class="area first"><strong>Garage</strong><i class="icon-garage"></i> 1</span>
+                                            <span class="status"><strong>Baths</strong><i class="icon-bath"></i> 3</span>
+                                            <span class="bedrooms last"><strong>Beds</strong><i class="icon-bed"></i> 2</span>
+                                        </div>
+                                    </div><!-- end boxes -->
+                                </div><!-- tab pane -->
+                            </div><!-- tabbed_widget -->
+                        </div><!-- tab-content -->
+                    </div> <!-- widget -->
+                </div><!-- end col-lg-7 -->
+
+            </div><!-- end row -->
+        </div><!-- end dm_container -->
+    </section><!-- end generalwrapper -->
+{% endblock %}
